@@ -1,6 +1,6 @@
 # Security Group for Primary and Replica Instances
 resource "aws_security_group" "postgres_sg" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = var.vpc_id
   name   = "postgres-security-group"
 
   ingress {
