@@ -5,10 +5,9 @@ import json
 
 app = Flask(__name__)
 
-# Directories for Terraform and Ansible
-TERRAFORM_DIR = "./Terraform"  # Update this to your Terraform directory
-ANSIBLE_DIR = "./ansible"      # Update this to your Ansible directory
-INVENTORY_FILE = "./ansible/inventory.ini"  # Path to your Ansible inventory file
+Terraform_dir = "./terraform"  
+Ansible_dir = "./ansible"      #
+Inventor_file_dir = "./ansible/inventory.ini" 
 
 @app.route('/generate', methods=['POST'])
 def generate_code():
@@ -20,7 +19,7 @@ def generate_code():
     shared_buffers = data.get('shared_buffers', '128MB')
 
     # Generate Terraform variables
-    with open(f"{TERRAFORM_DIR}/variables.tf", 'w') as f:
+    with open(f"{Terraform_dir}/variables.tf", 'w') as f:
         f.write(f"""
 variable "postgres_version" {{ default = "{version}" }}
 variable "instance_type" {{ default = "{instance_type}" }}
@@ -28,7 +27,7 @@ variable "replica_count" {{ default = {replicas} }}
 """)
 
     # Generate Ansible config
-    with open(f"{ANSIBLE_DIR}/all.yml", 'w') as f:
+    with open(f"{Ansible_dir}/all.yml", 'w') as f:
         f.write(f"""
 postgres_version: {version}
 max_connections: {max_connections}
@@ -40,7 +39,7 @@ shared_buffers: {shared_buffers}
 @app.route('/terraform/apply', methods=['POST'])
 def terraform_apply():
     try:
-        os.chdir(TERRAFORM_DIR)
+        os.chdir(Terraform_dir)
         # Initialize and apply Terraform to create infrastructure
         subprocess.run(["terraform", "init"], check=True)
         subprocess.run(["terraform", "plan"], check=True)
@@ -63,7 +62,7 @@ def update_inventory(instance_ips):
     primary_ip = instance_ips[0] if instance_ips else None
     replica_ips = instance_ips[1:] if len(instance_ips) > 1 else []
 
-    with open(INVENTORY_FILE, 'w') as f:
+    with open(Inventor_file_dir, 'w') as f:
         f.write("[primary]\n")  # Define the primary group
         if primary_ip:
             f.write(f"{primary_ip}\n")  # Write the primary IP
@@ -75,7 +74,7 @@ def update_inventory(instance_ips):
 @app.route('/ansible/setup', methods=['POST'])
 def ansible_setup():
     try:
-        os.chdir(ANSIBLE_DIR)
+        os.chdir(Ansible_dir)
         subprocess.run(["ansible-playbook", "setup.yml"], check=True)
         return jsonify({"message": "PostgreSQL configured successfully."}), 200
     except subprocess.CalledProcessError as e:
@@ -83,3 +82,6 @@ def ansible_setup():
 
 if __name__ == '__main__':
     app.run(debug = True)
+
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=5000)
