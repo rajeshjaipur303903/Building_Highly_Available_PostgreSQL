@@ -1,0 +1,60 @@
+---
+- name: Setup PostgreSQL Primary-Replica Architecture
+  hosts: all
+  become: true  # Use sudo to execute tasks
+
+  tasks:
+    - name: Install PostgreSQL
+      apt:
+        name: postgresql
+        state: present
+      when: ansible_distribution == "Ubuntu"  # Adjust this based on your OS
+
+    - name: Ensure PostgreSQL service is running
+      service:
+        name: postgresql
+        state: started
+        enabled: true
+
+    - name: Configure PostgreSQL for replication on the primary
+      when: inventory_hostname in groups['primary']
+      block:
+        - name: Update pg_hba.conf for replication
+          lineinfile:
+            path: /etc/postgresql/{{ postgres_version }}/main/pg_hba.conf
+            line: "host    replication     all             {{ item }}         md5"
+            state: present
+          loop: "{{ groups['replica'] }}"
+        
+        - name: Update postgresql.conf for replication
+          lineinfile:
+            path: /etc/postgresql/{{ postgres_version }}/main/postgresql.conf
+            regexp: '^#?wal_level ='
+            line: "wal_level = replica"
+        
+        - name: Reload PostgreSQL
+          service:
+            name: postgresql
+            state: reloaded
+
+    - name: Setup replica
+      when: inventory_hostname in groups['replica']
+      block:
+        - name: Install PostgreSQL client
+          apt:
+            name: postgresql-client
+            state: present
+
+        - name: Ensure replication is set up
+          shell: |
+            pg_basebackup -h {{ groups['primary'][0] }} -D /var/lib/postgresql/13/main -U postgres -v -P --wal-method=stream
+            echo "standby_mode = 'on'" >> /etc/postgresql/13/main/recovery.conf
+            echo "primary_conninfo = 'host={{ groups['primary'][0] }} user=postgres password=your_password_here'" >> /etc/postgresql/13/main/recovery.conf
+          args:
+            creates: /var/lib/postgresql/13/main/recovery.conf
+
+        - name: Start PostgreSQL on the replica
+          service:
+            name: postgresql
+            state: started
+            enabled: true

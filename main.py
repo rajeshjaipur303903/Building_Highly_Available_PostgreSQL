@@ -7,8 +7,8 @@ app = Flask(__name__)
 
 # Directories for Terraform and Ansible
 TERRAFORM_DIR = "./Terraform"  # Update this to your Terraform directory
-ANSIBLE_DIR = "./Ansible"      # Update this to your Ansible directory
-INVENTORY_FILE = "./Ansible/inventory.ini"  # Path to your Ansible inventory file
+ANSIBLE_DIR = "./ansible"      # Update this to your Ansible directory
+INVENTORY_FILE = "./ansible/inventory.ini"  # Path to your Ansible inventory file
 
 @app.route('/generate', methods=['POST'])
 def generate_code():
