@@ -1,0 +1,18 @@
+# Terraform files to ignore
+*.tfstate
+*.tfstate.backup
+*.tfvars       # Files with sensitive data (e.g., credentials)
+*.tfvars.json
+
+# Crash log files and override files
+crash.log
+override.tf
+override.tf.json
+.terraformrc
+terraform.rc
+
+# Directory used by Terraform to store modules and plugins
+.terraform/
+
+# Ignore local environment and plan files
+*.plan
