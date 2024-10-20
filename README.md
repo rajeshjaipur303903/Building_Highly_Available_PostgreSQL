@@ -1,14 +1,13 @@
-# Automation PostgreSQL Primary-Read-Replica Architecture
+# Automation Of PostgreSQL Primary-Read-Replica 
 
-In this project, Return success or error messages at each step, error handling, followed Best prectices in terms of security, code modularity, and idempotency.
+This project provides automated infrastructure management using Terraform and Ansible to deploy a PostgreSQL primary-read-replica architecture. It returns success or error messages at each step, follows best practices in security, code modularity, and ensures idempotency.
 
 
 ## Features
-- Dynamic generation of Terraform code and Ansible playbooks.
-- Endpoints for generating code, running Terraform plan/apply, and executing Ansible playbooks.
-- Handles success and error messages at each step.
-- Best practices in security, code modularity, and idempotency.
-
+**Dynamic code generation** -  Terraform configurations and Ansible playbooks are generated dynamically.
+**API endpoints**  to manage infrastructure provisioning and configuration.
+****Error handling****-  Returns success or error messages for every operation.
+****Security** ** - Follows best practices at the networking and vault levels.
 ### Prerequisites
 - Installed Python, flask, Terraform , Ansible and AWS configure 
 
@@ -57,20 +56,3 @@ curl -X POST http://localhost:5000/terraform/apply
 chmod 400 ~/.ssh/chalo   #pem file
 curl -X POST http://localhost:5000/ansible/setup
 ```
-
-
-
-We take care security also in server's allow in vpc cidr
-databases server in private subnet
-
-
-
-
-
-
-
-
-When defining encrypted variables in an Ansible vault file, the values should not include commas. The values should be provided in plain text format (which will be encrypted when you create or edit the vault).
-
-
-
