@@ -75,7 +75,7 @@ This endpoint configures PostgreSQL on the provisioned infrastructure and sets u
 
 **Before making the request,** ensure your private key file (.pem) has the correct permissions:
 ```
-chmod 400 ~/.ssh/chalo   #pem file
+chmod 400 ~/.ssh/chalo.pem  #pem file
 ```
 
 **Request**
