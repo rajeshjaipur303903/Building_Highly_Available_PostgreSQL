@@ -19,7 +19,7 @@ ansible -   https://www.digitalocean.com/community/tutorials/how-to-install-and-
 ```
 
 ### For Automation please follow these steps
-# First crate a vault_password file and export the environment variable with full path 
+# Crate a vault_password file and export the environment variable with full path 
 ```
 echo "write_vault_password" > /<your dir path>/vault_pass.txt
 chmod 600 vault_pass.txt   #for owner has access
