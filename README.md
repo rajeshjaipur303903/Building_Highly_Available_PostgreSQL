@@ -4,13 +4,13 @@ This project provides automated infrastructure management using Terraform and An
 
 
 ## Features
-**Dynamic code generation** -  Terraform configurations and Ansible playbooks are generated dynamically.
+**Dynamic code generation**   Terraform configurations and Ansible playbooks are generated dynamically.
 
 **API endpoints**  to manage infrastructure provisioning and configuration.
 
-****Error handling****-  Returns success or error messages for every operation.
+****Error handling****  Returns success or error messages for every operation.
 
-****Security** ** - Follows best practices at the networking and vault levels.
+****Security****  Follows best practices at the networking and vault levels.
 
 ### Prerequisites
 - Installed Python, flask, Terraform , Ansible and AWS configure 
