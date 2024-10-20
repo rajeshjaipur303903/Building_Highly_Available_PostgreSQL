@@ -36,7 +36,7 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-an
 ```
 echo "write_vault_password" > /<your-dir-path>/vault_pass.txt
 chmod 600 /<your-dir-path>/vault_pass.txt  # Restrict access to the owner
-export ANSIBLE_VAULT_PASSWORD_FILE=/workspaces/automation_with_flask/ansible/vault_pass.txt
+export ANSIBLE_VAULT_PASSWORD_FILE=/<your_path>/vault_pass.txt
 
 ```
 
