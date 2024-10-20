@@ -1,6 +1,6 @@
 # Automation Of PostgreSQL Primary-Read-Replica 
 
-This project provides automated infrastructure management using Terraform and Ansible to deploy a PostgreSQL primary-read-replica architecture. It returns success or error messages at each step, follows best practices in security, code modularity, and ensures idempotency.
+This automation provides infrastructure management using Terraform and Ansible to deploy a PostgreSQL primary-read-replica architecture. It returns success or error messages at each step, follows best practices in security, code modularity, and ensures idempotency.
 
 
 ## Features
@@ -13,31 +13,44 @@ This project provides automated infrastructure management using Terraform and An
 ****Security****  Follows best practices at the networking and vault levels.
 
 ### Prerequisites
-- Installed Python, flask, Terraform , Ansible and AWS configure 
+- Python(flask)
+- Terraform
+- Ansible
+- AWS configure 
 
 ### Installation Guide
+1. Install Flask
+ ```
+pip3 install flask 
 ```
-Flask -     pip3 install flask  #Installing Flask
-Terraform - https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli 
-ansible -   https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-20-04
+2. Terraform
+```
+https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli 
+```
+3. Ansible
+```
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-20-04
 ```
 
-# For Automation please follow these steps
-### Crate a vault_password file and export the environment variable with full path 
+# Setup Instructions
+### 1. Create a Vault Password File
 ```
-echo "write_vault_password" > /<your dir path>/vault_pass.txt
-chmod 600 vault_pass.txt   #for owner has access
+echo "write_vault_password" > /<your-dir-path>/vault_pass.txt
+chmod 600 /<your-dir-path>/vault_pass.txt  # Restrict access to the owner
 export ANSIBLE_VAULT_PASSWORD_FILE=/workspaces/automation_with_flask/ansible/vault_pass.txt
+
 ```
 
-### Now run the API -  so execute the below command
-
+### 2. Run the Flask API
+Make sure the Flask application (main.py) is in the current directory
 ```
 python main.py
 ```
 
-# Endpoints 
-### 1. POST /generate: Generate Terraform and Ansible configs with custom parameters.
+# API Endpoints 
+### 1. POST /generate
+This endpoint dynamically generates Terraform and Ansible configurations with the provided parameters.
+
 ```
 curl -X POST http://localhost:5000/generate \
 -H "Content-Type: application/json" \
@@ -50,13 +63,36 @@ curl -X POST http://localhost:5000/generate \
 }'
 ```
 
-### 2. POST /terraform/apply: Provision infrastructure.
+### 2. POST /terraform/apply
+This endpoint provisions infrastructure using the generated Terraform code.
+
 ```
 curl -X POST http://localhost:5000/terraform/apply
 ```
 
-### 3. POST /ansible/setup: Configure PostgreSQL with replication
+### 3. POST /ansible/setup
+This endpoint configures PostgreSQL on the provisioned infrastructure and sets up replication.
+
+**Before making the request,** ensure your private key file (.pem) has the correct permissions:
 ```
 chmod 400 ~/.ssh/chalo   #pem file
+```
+
+**Request**
+```
 curl -X POST http://localhost:5000/ansible/setup
 ```
+
+# Best Practices Followed 
+**Security**
+- Vault integration to secure sensitive information.
+- SSH key permissions configured to ensure proper access control.
+
+**Code Modularity**
+- Terraform and Ansible code is modular, making it easy to extend and maintain.
+
+**Idempotency**
+- Ensures repeated executions result in the same state without unintended side effects.
+
+**Error Handling**
+- Provides meaningful error messages for failed operations and confirms success at each step.
