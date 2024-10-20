@@ -51,7 +51,7 @@ python main.py
 ### 1. POST /generate
 This endpoint dynamically generates Terraform and Ansible configurations with the provided parameters.
 
-You Can Configure values for Architecture
+You Can Configure values here
 ```
 curl -X POST http://localhost:5000/generate \
 -H "Content-Type: application/json" \
