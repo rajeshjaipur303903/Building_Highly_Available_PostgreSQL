@@ -1,3 +1,8 @@
+resource "aws_key_pair" "chalo_pem_key" {
+  key_name   = "postgres-deployer-key"
+  public_key = file("~/.ssh/chalo.pub")  
+}
+
 # Security Group for Primary and Replica Instances
 resource "aws_security_group" "postgres_sg" {
   vpc_id = var.vpc_id
@@ -36,7 +41,10 @@ resource "aws_instance" "primary" {
   instance_type = var.instance_type
   subnet_id     = var.private_subnet_cidr 
   security_groups = [aws_security_group.postgres_sg.name]
-
+  key_name = aws_key_pair.chalo_pem_key.key_name  
+  
+  depends_on = [aws_key_pair.chalo_pem_key]
+  
   tags = {
     Name = "PrimaryDB"
   }
@@ -49,7 +57,10 @@ resource "aws_instance" "replica" {
   instance_type = var.instance_type
   subnet_id     = var.private_subnet_cidr  
   security_groups = [aws_security_group.postgres_sg.name]
-
+  key_name = aws_key_pair.chalo_pem_key.key_name  
+  
+  depends_on = [aws_key_pair.chalo_pem_key]
+ 
   tags = {
     Name = "ReplicaDB-${count.index + 1}"
   }

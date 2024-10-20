@@ -1,14 +1,16 @@
 ---
-- name: Setup PostgreSQL Primary-Replica Architecture
+- name: PostgreSQL Primary-Replica Architecture
   hosts: all
-  become: true  # Use sudo to execute tasks
+  become: true
+
+  vars_files:
+    - /workspaces/automation_with_flask/ansible/my_vault.yaml
 
   tasks:
     - name: Install PostgreSQL
       apt:
         name: postgresql
         state: present
-      when: ansible_distribution == "Ubuntu"  # Adjust this based on your OS
 
     - name: Ensure PostgreSQL service is running
       service:
@@ -32,10 +34,10 @@
             regexp: '^#?wal_level ='
             line: "wal_level = replica"
         
-        - name: Reload PostgreSQL
+        - name: Restart PostgreSQL to apply replication settings
           service:
             name: postgresql
-            state: reloaded
+            state: restarted
 
     - name: Setup replica
       when: inventory_hostname in groups['replica']
@@ -45,13 +47,18 @@
             name: postgresql-client
             state: present
 
+        - name: Ensure PostgreSQL is stopped on replica before base backup
+          service:
+            name: postgresql
+            state: stopped
+    
         - name: Ensure replication is set up
           shell: |
-            pg_basebackup -h {{ groups['primary'][0] }} -D /var/lib/postgresql/13/main -U postgres -v -P --wal-method=stream
-            echo "standby_mode = 'on'" >> /etc/postgresql/13/main/recovery.conf
-            echo "primary_conninfo = 'host={{ groups['primary'][0] }} user=postgres password=your_password_here'" >> /etc/postgresql/13/main/recovery.conf
+            pg_basebackup -h {{ groups['primary'][0] }} -D /var/lib/postgresql/{{ postgres_version }}/main -U postgres -v -P --wal-method=stream
+            echo "standby_mode = 'on'" >> /etc/postgresql/{{ postgres_version }}/main/recovery.conf
+            echo "primary_conninfo = 'host={{ groups['primary'][0] }} user={{ replication_user }} password={{ db_password }}" >> /etc/postgresql/{{ postgres_version }}/main/recovery.conf
           args:
-            creates: /var/lib/postgresql/13/main/recovery.conf
+            creates: /var/lib/postgresql/{{ postgres_version }}/main/recovery.conf
 
         - name: Start PostgreSQL on the replica
           service:

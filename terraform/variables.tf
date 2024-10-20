@@ -17,3 +17,6 @@ variable "private_subnet_cidr" {
 variable "ami" {
   default     = "ami-0c55b159cbfafe1f0" 
 }
+variable "postgres_version" { default = "13" }
+variable "instance_type" { default = "t3.micro" }
+variable "replica_count" { default = 2 }
