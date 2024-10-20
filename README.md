@@ -1,6 +1,7 @@
 # Automation PostgreSQL Primary-Read-Replica Architecture
 
-#In this project, Every stage we have Response system and we maintain the error handling followed all security aspec
+### In this project, Return success or error messages at each step, error handling, followed Best prectices in terms of security, code modularity, and idempotency.
+
 
 ## Features
 - Dynamic generation of Terraform code and Ansible playbooks.
