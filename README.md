@@ -22,3 +22,9 @@ curl -X POST http://localhost:5000/terraform/apply \
 
 
 curl -X POST http://localhost:5000/ansible/setup
+
+
+POST /generate: Generate Terraform and Ansible configs with custom parameters.
+POST /terraform/apply: Provision infrastructure.
+POST /ansible/setup: Configure PostgreSQL with replication.
+GET /status: Check the status of infrastructure.
