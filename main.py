@@ -175,7 +175,7 @@ def terraform_apply():
         os.chdir(TERRAFORM_DIR)
         subprocess.run(["terraform", "init"], check=True)
         subprocess.run(["terraform", "plan"], check=True)
-        # subprocess.run(["terraform", "apply", "-auto-approve"], check=True)
+        subprocess.run(["terraform", "apply", "-auto-approve"], check=True)
 
         # Get instance IPs from Terraform output
         output = subprocess.check_output(["terraform", "output", "-json"])
