@@ -5,11 +5,13 @@ import json
 
 app = Flask(__name__)
 
-# Directories
-TERRAFORM_DIR = "/workspaces/automation_with_flask/terraform"
-ANSIBLE_DIR = "/workspaces/automation_with_flask/ansible"
-INVENTORY_FILE_PATH = "/workspaces/automation_with_flask/ansible/inventory.ini"
-VARIABLES_TF_PATH = f"{TERRAFORM_DIR}/variables.tf"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+TERRAFORM_DIR = os.path.join(BASE_DIR, "terraform")
+ANSIBLE_DIR = os.path.join(BASE_DIR, "ansible")
+INVENTORY_FILE_PATH = os.path.join(ANSIBLE_DIR, "inventory.ini")
+VARIABLES_TF_PATH = os.path.join(TERRAFORM_DIR, "variables.tf")
 
 # Helper: Check and append to variables.tf
 def append_to_variables_tf(version, instance_type, replicas):

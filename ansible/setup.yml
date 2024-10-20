@@ -1,10 +1,10 @@
 ---
 - name: PostgreSQL Primary-Replica Architecture
-  hosts: all
+  hosts: localhost
   become: true
 
   vars_files:
-    - /workspaces/automation_with_flask/ansible/my_vault.yaml
+    - my_vault.yaml
 
   tasks:
     - name: Install PostgreSQL
