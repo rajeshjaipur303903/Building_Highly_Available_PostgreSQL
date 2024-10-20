@@ -13,9 +13,9 @@
 
 ### Installation Guide
 ```
-flask - "pip install flask" 
-terraform - https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
-ansible - https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-20-04
+Flask -     pip3 install flask  #Installing Flask
+Terraform - https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli 
+ansible -   https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-20-04
 ```
 
 ### For Automation please follow these steps
@@ -39,18 +39,16 @@ curl -X POST http://localhost:5000/generate \
 -H "Content-Type: application/json" \
 -d '{
   "postgres_version": "12",
-  "instance_type": "t3.micro",
+  "instance_type": "t4g.small",
   "replicas": 2,
   "max_connections": 200,
-  "shared_buffers": "256MB"
+  "shared_buffers": "500MB"
 }'
 ```
 
 # 2. POST /terraform/apply: Provision infrastructure.
 ```
-curl -X POST http://localhost:5000/terraform/apply \
--H "Content-Type: application/json" \
--d '{"key_path": "/path/to/private_key.pem"}'
+curl -X POST http://localhost:5000/terraform/apply
 ```
 
 # 3. POST /ansible/setup: Configure PostgreSQL with replication
@@ -60,23 +58,10 @@ curl -X POST http://localhost:5000/ansible/setup
 ```
 
 
-We take care security also in server's allow in vpc cide 
+
+We take care security also in server's allow in vpc cidr
 databases server in private subnet
 
-
-
-
-
-
-
-
-
-
-
-.curl -X POST http://localhost:5000/terraform/apply \
--H "Content-Type: application/json" \
--d '{"key_path": "/path/to/private_key.pem"}'
-GET /status: Check the status of infrastructure.
 
 
 
