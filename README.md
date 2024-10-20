@@ -1,4 +1,4 @@
-# Deploying Highly Available PostgreSQL with Flask, Terraform and Ansible
+# Building Highly Available PostgreSQL with Flask, Terraform and Ansible
 This automation provides infrastructure management using Terraform and Ansible to deploy a PostgreSQL primary-read-replica architecture. It returns success or error messages at each step, follows best practices in security, code modularity, and ensures idempotency.
 
 
